@@ -47,11 +47,13 @@ case $? in
   0) #[OK] No Wipe
     backtitle+="No Wipe > " ;;
   1) #[Cancel] Long Wipe
-    wipe="--long-wipe "
-    backtitle+="Long Wipe > " ;;
+    backtitle+="Long Wipe > "
+    mkltfs $location --long-wipe &> /tmp/lto &
+    dialog --backtitle "$backtitle" --clear --tailbox /tmp/lto 35 110;;
   3)#[Extra] Short Wipe
-    wipe="--wipe "
-    backtitle+="Short Wipe > " ;;
+    backtitle+="Short Wipe > "
+    mkltfs $location --wipe &> /tmp/lto &
+    dialog --backtitle "$backtitle" --clear --tailbox /tmp/lto 35 110;;
   255)
     echo "ESC pressed.";;
 esac
@@ -109,9 +111,10 @@ dialog  --backtitle "$backtitle" \
 
 case $? in
   0) #[Yes]
-    mkltfs="mkltfs $location $volumelabel $volumeserial $wipe $compression $forced"
-    ping -c 5 8.8.8.8> tmp/test2&
-    dialog --backtitle "$backtitle" --tailbox tmp/test2 22 100;;
+    #mkltfs $location $volumelabel $volumeserial $wipe $compression $forced 2>&1 | tee /tmp/test2 &
+    mkltfs $location $volumelabel $volumeserial $compression $forced &> /tmp/lto &
+    #tail -f /tmp/test2;;
+    dialog --backtitle "$backtitle" --clear --tailbox /tmp/lto 35 110;;
   1) #[No]
     echo "Exiting";;
   255)
@@ -119,4 +122,4 @@ case $? in
 esac
 
 #-------------------------------------------------------------------------------
-clear
+#clear
