@@ -109,10 +109,10 @@ dialog  --backtitle "$backtitle" \
         --title "Confirmation" --clear \
         --cr-wrap --yesno "\nSelected options:\n\n$confirmation\n\nDo you want to proceed?" 16 40
 
-case $? in
+case $? ins
   0) #[Yes]
     #mkltfs $location $volumelabel $volumeserial $wipe $compression $forced 2>&1 | tee /tmp/test2 &
-    mkltfs $location $volumelabel $volumeserial $compression $forced &> /tmp/lto &
+    echo "mkltfs $location $volumelabel $volumeserial $compression $forced" &> /tmp/lto &
     #tail -f /tmp/test2;;
     dialog --backtitle "$backtitle" --clear --tailbox /tmp/lto 35 110;;
   1) #[No]
@@ -122,4 +122,4 @@ case $? in
 esac
 
 #-------------------------------------------------------------------------------
-#clear
+clear
